@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 
 const apiKey = process.env.XAI_API_KEY;
-const model = process.env.XAI_MODEL || "grok-2-latest";
+const model = process.env.XAI_MODEL || "grok-4.3";
 
 const client = apiKey
   ? new OpenAI({
