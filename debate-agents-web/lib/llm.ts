@@ -1,9 +1,14 @@
 import OpenAI from "openai";
 
-const apiKey = process.env.OPENAI_API_KEY;
-const model = process.env.OPENAI_MODEL || "gpt-5.2";
+const apiKey = process.env.XAI_API_KEY;
+const model = process.env.XAI_MODEL || "grok-2-latest";
 
-const client = apiKey ? new OpenAI({ apiKey }) : null;
+const client = apiKey
+  ? new OpenAI({
+      apiKey,
+      baseURL: "https://api.x.ai/v1",
+    })
+  : null;
 
 export async function callLLM(prompt: string): Promise<string> {
   if (!client) return mockLLM(prompt);
