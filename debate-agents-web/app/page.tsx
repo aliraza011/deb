@@ -28,26 +28,41 @@ export default function Home() {
   }
 
   async function startDebate() {
-    setLoading(true);
-    setError("");
-    setResult(null);
+  setLoading(true);
+  setError("");
+  setResult(null);
+
+  try {
+    const res = await fetch("/api/debate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        topic,
+        agentIds: selected
+      })
+    });
+
+    const text = await res.text();
+
+    let data: any;
 
     try {
-      const res = await fetch("/api/debate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic, selectedAgentIds: selected })
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Debate failed.");
-      setResult(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
-    } finally {
-      setLoading(false);
+      data = JSON.parse(text);
+    } catch {
+      throw new Error(text || "Server returned a non-JSON response.");
     }
+
+    if (!res.ok || data.ok === false) {
+      throw new Error(data.error || "Debate failed.");
+    }
+
+    setResult(data.result || data);
+  } catch (err) {
+    setError(err instanceof Error ? err.message : "Something went wrong.");
+  } finally {
+    setLoading(false);
   }
+}
 
   return (
     <main className="shell">
