@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { runDebate } from "../../../lib/engine";
-
+ 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
